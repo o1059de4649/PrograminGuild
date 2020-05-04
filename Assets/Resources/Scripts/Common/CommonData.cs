@@ -19,6 +19,8 @@ namespace Common
         }
         static CommonObjects _commonObjects;
 
+        static public SaveDataModel saveData => CommonJsonData.GetSaveDataModel();
+
         /// <summary>
         /// 共通プレイヤー(毎回ここから取得する)
         /// </summary>
@@ -57,7 +59,7 @@ namespace Common
         /// </summary>
         /// <param name="number">ダンジョン番号</param>
         /// <returns></returns>
-        public List<EnemyModel> CreateEnemys(int number)
+        public List<EnemyModel> CreateEnemys(int? number)
         {
             var result = new List<EnemyModel>();
             int random_range_some = Random.Range(1, 3);

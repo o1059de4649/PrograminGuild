@@ -115,7 +115,8 @@ public class AdventureControl : MonoBehaviour
     {
         var battle_log_view = new BattleViewModel();
         var player_models = CommonData.playerModels;
-        var enemy_models = new CommonData().CreateEnemys(CommonJsonData.GetDungeonNumber());
+        int? dungeon_number = CommonData.saveData.dungeon_number;
+        var enemy_models = new CommonData().CreateEnemys(CommonData.saveData.dungeon_number);
         var isfinish = false;
 
         //経験値の合計を保存
@@ -140,6 +141,10 @@ public class AdventureControl : MonoBehaviour
         {
             //終了メッセージ
             end_text = $"{get_exp}Bのメモリを獲得した。";
+            //経験値を保存
+            CommonData.saveData.dungeon_number = 0;
+            CommonData.saveData.byte_all += get_exp;
+            CommonJsonData.SaveModels<SaveDataModel>(CommonData.saveData);
         }
         else 
         {

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Models;
+using System;
 
 namespace Common 
 {
     public class CommonJsonData : MonoBehaviour
     {
         const string PLAYER_MODELS_FILENAME = "PLAYER_MODELS_FILENAME";
-        const string DUNGEON_NUMBER = "DUNGEON_NUMBER";
+        const string SAVE_DATA = "SAVE_DATA";
         /// <summary>
         /// プレイヤーを取得(毎回ここから取得する)
         /// </summary>
@@ -22,20 +23,29 @@ namespace Common
         /// <summary>
         /// プレイヤーを取得(毎回ここから取得する)
         /// </summary>
-        static public int GetDungeonNumber()
+        static public SaveDataModel GetSaveDataModel()
         {
-            var result = 0;
-            ObjectExpend.LoadObject<int>(nameof(DUNGEON_NUMBER));
-            return result;
+            SaveDataModel model;
+            try
+            {
+                model = ObjectExpend.LoadObject<SaveDataModel>(nameof(SAVE_DATA));
+                if (null == model) return new SaveDataModel();
+            }
+            catch (Exception e)
+            {
+                model = new SaveDataModel();
+            }
+
+            return model;
         }
 
         /// <summary>
-        /// プレイヤーのすべてを保存
+        /// オブジェクトの保存
         /// </summary>
-        /// <param name="playerModels"></param>
-        static public void SavePlayerModels(List<PlayerModel> playerModels)
+        /// <param name="Models">保存対象</param>
+        static public void SaveModels<T>(T Models)
         {
-            ObjectExpend.SaveObject(playerModels,nameof(PLAYER_MODELS_FILENAME));
+            ObjectExpend.SaveObject(Models,nameof(PLAYER_MODELS_FILENAME));
         }
 
 
