@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "376315297833",
+    "firebase_url": "https://proguraminguild.firebaseio.com",
+    "project_id": "proguraminguild",
+    "storage_bucket": "proguraminguild.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376315297833:android:816e46d10c575a807f5c38",
+        "android_client_info": {
+          "package_name": "o1059de4649.ProguraminGuild"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "376315297833-fuvjqmctn62l0759fbtca7o2cbsameqs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzCe1cLQ6rkgkx-HVntyntBrPd6a2v7-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "376315297833-fuvjqmctn62l0759fbtca7o2cbsameqs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
