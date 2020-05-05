@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Models 
 {
+    [System.Serializable]
     public class PlayerModel : CharacterModelBase
     {
         public List<LibraryModel> libraryModels;

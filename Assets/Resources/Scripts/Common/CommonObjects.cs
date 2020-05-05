@@ -11,5 +11,6 @@ namespace Common
         public GameObject battle_Log_content;
         public GameObject battle_Log_parent;
         public GameObject battle_backButton;
+        public GameObject status_board;
     }
 }

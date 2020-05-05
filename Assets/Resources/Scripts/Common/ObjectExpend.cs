@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Common 
 {
@@ -14,7 +15,7 @@ namespace Common
             // JSONにシリアライズ
             var json = JsonUtility.ToJson(save_obj);
             // Assetsフォルダに保存する
-            var path = Application.dataPath + "/" + filename + extension;
+            var path = Application.persistentDataPath + "/" + filename + extension;
             var writer = new StreamWriter(path, false); // 上書き
             writer.WriteLine(json);
             writer.Flush();
@@ -23,8 +24,8 @@ namespace Common
 
         static public T LoadObject<T>(string filename) 
         {
-            T result = default(T);
-            var path = Application.dataPath + "/" + filename + extension;
+            T result;
+            var path = Application.persistentDataPath + "/" + filename + extension;
             if (File.Exists(path))
             {
                 StreamReader streamReader;
@@ -34,8 +35,33 @@ namespace Common
 
                 result = JsonUtility.FromJson<T>(data);
             }
+            else { result = default(T); }
             
             return result;    
+        }
+
+        /// <summary>
+        /// コピーメソッド
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public static T DeepCopy<T>(T target)
+        {
+            T result;
+            BinaryFormatter b = new BinaryFormatter();
+            MemoryStream mem = new MemoryStream();
+            try
+            {
+                b.Serialize(mem, target);
+                mem.Position = 0;
+                result = (T)b.Deserialize(mem);
+            }
+            finally
+            {
+                mem.Close();
+            }
+            return result;
         }
 
         /// <summary>

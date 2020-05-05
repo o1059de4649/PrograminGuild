@@ -20,7 +20,8 @@ public class AdventureControl : MonoBehaviour
     public GameObject battlelog_text_parent => CommonData.commonObjects.battle_Log_parent;
     public GameObject battle_backButton => CommonData.commonObjects.battle_backButton;
     public BattleControl battleControl => GetComponent<BattleControl>();
-
+    int get_all_exp = 0;
+    CommonData commonData;
     public enum ActionType 
     {
         Battle,
@@ -32,7 +33,22 @@ public class AdventureControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //セーブデータ呼び出し
+        commonData = new CommonData();
         AdventureAction();
+        Save();
+        UpdateStatusBoard();
+    }
+
+    /// <summary>
+    /// セーブメソッド
+    /// </summary>
+    public void Save() 
+    {
+        //経験値を保存
+        commonData.saveData.dungeon_number = 0;
+        commonData.saveData.byte_all += get_all_exp;
+        CommonJsonData.SaveModels<SaveDataModel>(commonData.saveData,CommonJsonData.SAVE_DATA);
     }
 
     // Update is called once per frame
@@ -48,15 +64,16 @@ public class AdventureControl : MonoBehaviour
     {
         //現在時刻
         var new_datetime = DateTime.UtcNow;
-        old_datetime = DateTime.Parse(PlayerPrefs.GetString(nameof(OLD_DATETIME)));
+        old_datetime = (PlayerPrefs.HasKey(OLD_DATETIME)) ?
+            DateTime.Parse(PlayerPrefs.GetString(nameof(OLD_DATETIME))):new_datetime;
         PlayerPrefs.SetString(nameof(OLD_DATETIME),new_datetime.ToString());
         //古い時刻
 
         var minutes = (new_datetime - old_datetime).TotalMinutes;
 
         //分数だけランダムにイベント発火
-        //for (int i = 0; i < minutes; i++)
-        for (int i = 0; i < 10; i++)
+        //for (int i = 0; i < 10; i++)
+        for (int i = 0; i < minutes; i++)
         {
             EventAction(RandomAction());
         }
@@ -115,8 +132,8 @@ public class AdventureControl : MonoBehaviour
     {
         var battle_log_view = new BattleViewModel();
         var player_models = CommonData.playerModels;
-        int? dungeon_number = CommonData.saveData.dungeon_number;
-        var enemy_models = new CommonData().CreateEnemys(CommonData.saveData.dungeon_number);
+        int? dungeon_number =  commonData.saveData.dungeon_number;
+        var enemy_models = commonData.CreateEnemys(commonData.saveData.dungeon_number);
         var isfinish = false;
 
         //経験値の合計を保存
@@ -141,10 +158,8 @@ public class AdventureControl : MonoBehaviour
         {
             //終了メッセージ
             end_text = $"{get_exp}Bのメモリを獲得した。";
-            //経験値を保存
-            CommonData.saveData.dungeon_number = 0;
-            CommonData.saveData.byte_all += get_exp;
-            CommonJsonData.SaveModels<SaveDataModel>(CommonData.saveData);
+            //蓄積して最後に加算
+            get_all_exp += get_exp;
         }
         else 
         {
@@ -171,6 +186,9 @@ public class AdventureControl : MonoBehaviour
         battleViewModel.battleLogs.Add(battle_log_model);
     }
 
-
+    public void UpdateStatusBoard() 
+    {
+        CommonData.commonObjects.status_board.GetComponent<Text>().text = commonData.saveData.byte_all.ToString() + "B";
+    }
 
 }

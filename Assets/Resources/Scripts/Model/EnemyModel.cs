@@ -4,6 +4,7 @@ using UnityEngine;
 using Models;
 using System.Text;
 
+[System.Serializable]
 public class EnemyModel : CharacterModelBase
 {
     /// <summary>

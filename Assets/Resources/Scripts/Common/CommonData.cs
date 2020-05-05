@@ -8,8 +8,21 @@ namespace Common
 {
     public class CommonData : MonoBehaviour
     {
+        #region Constructor
+        public CommonData() 
+        {
+            //セーブデータ読み込み
+            saveData = CommonJsonData.GetSaveDataModel();
+        }
+        #endregion
+
+        #region Property
         public const int DEFAULT_ENEMY_NUMBER = 1;
+        /// <summary>
+        /// シーン上のオブジェクト
+        /// </summary>
         const string COMMON_OBJECT = "CommonObjects";
+
         public static int dungeon_number = 0;
         public static List<string> abc_list => "ABCDEFGHIJKLMNOPQRSTUVWXYZ".Select(ch => ch + "").ToList();
         static public CommonObjects commonObjects 
@@ -19,7 +32,10 @@ namespace Common
         }
         static CommonObjects _commonObjects;
 
-        static public SaveDataModel saveData => CommonJsonData.GetSaveDataModel();
+        /// <summary>
+        /// セーブデータ
+        /// </summary>
+        public SaveDataModel saveData;
 
         /// <summary>
         /// 共通プレイヤー(毎回ここから取得する)
@@ -38,7 +54,9 @@ namespace Common
             set { _playerModels = value; }
         }
         static private List<PlayerModel> _playerModels;
+        #endregion
 
+        #region Method
         /// <summary>
         /// データが存在しない時のデータ
         /// </summary>
@@ -72,7 +90,7 @@ namespace Common
                 for (int k = 0; k < random_range_some; k++)
                 {
                     int random_range_kind = Random.Range(1,3);
-                    var enemy = master_enemy_list[random_range_kind];
+                    var enemy = ObjectExpend.DeepCopy<EnemyModel>(master_enemy_list[random_range_kind]);//TDOO:DeepCopy
                     enemy.nickName += abc_list[k];//アルファベットを追加
                     result.Add(enemy);
                 }
@@ -80,8 +98,9 @@ namespace Common
 
             return result;
         }
+        #endregion
 
-        
+        #region MasterModel
         /// <summary>
         /// 敵の全データ
         /// </summary>
@@ -151,7 +170,7 @@ namespace Common
                     speed = 1
                 }
         };
-
+        #endregion
 
 
 

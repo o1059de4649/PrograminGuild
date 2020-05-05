@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterModelBase : MonoBehaviour
+[System.Serializable]
+public class CharacterModelBase
 {
     public int id { get; set; }
     public string nickName { get; set; }
