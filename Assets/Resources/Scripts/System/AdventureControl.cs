@@ -21,6 +21,7 @@ public class AdventureControl : MonoBehaviour
     public GameObject battle_backButton => CommonData.commonObjects.battle_backButton;
     public BattleControl battleControl => GetComponent<BattleControl>();
     int get_all_exp = 0;
+    int parts_chicket = 0;
     CommonData commonData;
     public enum ActionType 
     {
@@ -48,6 +49,7 @@ public class AdventureControl : MonoBehaviour
         //経験値を保存
         commonData.saveData.dungeon_number = 0;
         commonData.saveData.byte_all += get_all_exp;
+        commonData.saveData.parts_chicket += parts_chicket;
         CommonJsonData.SaveModels<SaveDataModel>(commonData.saveData,CommonJsonData.SAVE_DATA);
     }
 
@@ -70,6 +72,7 @@ public class AdventureControl : MonoBehaviour
         //古い時刻
 
         var minutes = (new_datetime - old_datetime).TotalMinutes;
+        minutes = (minutes > 180) ? 180 :  minutes ;
 
         //分数だけランダムにイベント発火
         //for (int i = 0; i < 10; i++)
@@ -122,6 +125,7 @@ public class AdventureControl : MonoBehaviour
 
     public void TresureEvent() 
     {
+        parts_chicket++;
         AdventureLogModel.CreateText("トレジャー", log_text_obj, log_text_content);
     }
 
@@ -186,9 +190,17 @@ public class AdventureControl : MonoBehaviour
         battleViewModel.battleLogs.Add(battle_log_model);
     }
 
+    /// <summary>
+    /// ステータスを更新
+    /// </summary>
     public void UpdateStatusBoard() 
     {
-        CommonData.commonObjects.status_board.GetComponent<Text>().text = commonData.saveData.byte_all.ToString() + "B";
+        //ステータス
+        var sb = new StringBuilder();
+        sb.AppendLine(commonData.saveData.byte_all.ToString() + "B");
+        sb.AppendLine("パーツ券"+commonData.saveData.parts_chicket.ToString()+"枚");
+        var _text = sb.ToString();
+        CommonData.commonObjects.status_board.GetComponent<Text>().text = _text;
     }
 
 }
